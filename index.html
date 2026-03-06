@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Equation Balancer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container landing">
+        <h1>ยินดีต้อนรับสู่<br>เกมดุลสมการ การ การ การ!</h1>
+        <p>เลือกจำนวนข้อ</p>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectCount(5)">5</button>
+            <button class="option-btn" onclick="selectCount(10)">10</button>
+            <button class="option-btn" onclick="selectCount(20)">20</button>
+        </div>
+
+        <div class="custom-input-group">
+            <label for="custom-count">หรือกำหนดเอง</label>
+            <input type="number" id="custom-count" min="1" max="100" placeholder="เช่น 15">
+        </div>
+
+        <button id="generate-btn" class="primary-btn">สร้างโจทย์และเริ่มเล่น!</button>
+    </div>
+
+    <script>
+        const customInput = document.getElementById('custom-count');
+        let selectedCount = 5; // Default
+
+        function selectCount(count) {
+            selectedCount = count;
+            customInput.value = ''; // Clear custom input if preset is clicked
+            
+            // Highlight selected button visually
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(parseInt(btn.innerText) === count) btn.classList.add('active');
+            });
+        }
+
+        document.getElementById('generate-btn').addEventListener('click', () => {
+            const customValue = parseInt(customInput.value);
+            if (customValue && customValue > parseInt(customInput.getAttribute("max"))) {
+                return;
+            }
+
+            if (customValue && customValue > 0) {
+                selectedCount = customValue;
+            }
+            // Navigate to game page with count as a URL parameter
+            window.location.href = `game.html?count=${selectedCount}`;
+        });
+
+        customInput.addEventListener("input", () => {
+            const amount = parseInt(customInput.value);
+            if (amount && amount > parseInt(customInput.getAttribute("max"))) {
+                customInput.value = 1;
+            }
+        });
+
+        // Initialize default selection
+        selectCount(5);
+    </script>
+</body>
+</html>
