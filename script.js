@@ -162,12 +162,25 @@ function generateSynthesis() {
 
 function generateEquations(count) {
     const generated = [];
-    for (let i = 0; i < count; i++) {
-        // Randomly choose between Combustion (40%) and Synthesis (60%)
+    const seen = new Set();
+    let attempts = 0;
+    const maxAttempts = count * 50; // Safety break to prevent infinite loops
+
+    while (generated.length < count && attempts < maxAttempts) {
+        attempts++;
+        let eq;
         if (Math.random() < 0.4) {
-            generated.push(generateCombustion());
+            eq = generateCombustion();
         } else {
-            generated.push(generateSynthesis());
+            eq = generateSynthesis();
+        }
+        
+        // Create a unique key for the equation based on its formulas and operators
+        const key = eq.parts.map(p => p.type === 'molecule' ? p.formula : p.text).join(' ');
+        
+        if (!seen.has(key)) {
+            seen.add(key);
+            generated.push(eq);
         }
     }
     return generated;
